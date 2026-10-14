@@ -1,0 +1,112 @@
+{% from "_sidebar.html" import shell, footer %}
+{{ shell("tendencia_central.html") }}
+
+<!-- Encabezado -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-surface-container-high">
+  <div class="flex items-start gap-4">
+    <div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shadow-sm shrink-0">
+      <span class="material-symbols-outlined text-[26px]">trending_up</span>
+    </div>
+    <div>
+      <span class="text-[11px] font-semibold text-secondary tracking-wider uppercase">Módulo Estadístico</span>
+      <h1 class="text-[28px] font-bold text-primary tracking-tight">Medidas de Tendencia Central</h1>
+      <p class="text-[14px] text-on-surface-variant mt-1">
+        <strong>Media</strong>, <strong>Mediana</strong> y <strong>Moda</strong> de la edad de fallecidos COVID-19 — Región Tacna.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Concepto -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border-l-4 border-[#0099b8]">
+  <div class="flex items-center gap-2 mb-2">
+    <span class="material-symbols-outlined text-[20px] text-[#0099b8]">info</span>
+    <span class="text-[14px] font-semibold text-primary">¿Qué son las medidas de tendencia central?</span>
+  </div>
+  <p class="text-[13px] text-on-surface-variant">
+    Resumen un conjunto de datos con un valor representativo.
+    <strong>Media (x̄)</strong>: promedio aritmético.
+    <strong>Mediana</strong>: valor central que divide el 50% de los datos.
+    <strong>Moda</strong>: valor más frecuente.
+    Se visualizan sobre histogramas y boxplots para ver su relación con la distribución.
+  </p>
+</div>
+
+<!-- Tarjetas KPI -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col items-center text-center">
+    <span class="material-symbols-outlined text-[28px] text-[#ba1a1a] mb-2">calculate</span>
+    <span class="text-[11px] font-semibold text-outline tracking-wider uppercase mb-1">Media (x̄)</span>
+    <span class="text-[32px] font-bold text-primary">{{ media }}</span>
+    <span class="text-[12px] text-on-surface-variant">años</span>
+    <p class="text-[11px] text-on-surface-variant mt-2">Promedio aritmético de las edades de todos los fallecidos.</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col items-center text-center">
+    <span class="material-symbols-outlined text-[28px] text-[#395f95] mb-2">linear_scale</span>
+    <span class="text-[11px] font-semibold text-outline tracking-wider uppercase mb-1">Mediana</span>
+    <span class="text-[32px] font-bold text-primary">{{ mediana }}</span>
+    <span class="text-[12px] text-on-surface-variant">años</span>
+    <p class="text-[11px] text-on-surface-variant mt-2">El 50% de los fallecidos tiene edad por debajo de este valor.</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col items-center text-center">
+    <span class="material-symbols-outlined text-[28px] text-[#0099b8] mb-2">star</span>
+    <span class="text-[11px] font-semibold text-outline tracking-wider uppercase mb-1">Moda</span>
+    <span class="text-[32px] font-bold text-primary">{{ moda }}</span>
+    <span class="text-[12px] text-on-surface-variant">años</span>
+    <p class="text-[11px] text-on-surface-variant mt-2">Edad que se repite con mayor frecuencia en el dataset.</p>
+  </div>
+</div>
+
+<!-- Interpretación de sesgo -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex items-center gap-4">
+  <div class="w-10 h-10 rounded-xl bg-surface-container-low text-secondary flex items-center justify-center shrink-0">
+    <span class="material-symbols-outlined text-[22px]">analytics</span>
+  </div>
+  <div>
+    <span class="text-[14px] font-semibold text-primary">Interpretación de la distribución</span>
+    <p class="text-[12px] text-on-surface-variant mt-1">
+      Si <strong>Media > Mediana > Moda</strong> → distribución con sesgo a la derecha (cola hacia edades mayores).<br/>
+      Esto indicaría que la mayoría de fallecidos son adultos mayores, con algunos casos extremos que elevan el promedio.
+    </p>
+  </div>
+</div>
+
+<!-- Gráficos -->
+{% for g in graficos %}
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+  <div class="p-5 border-b border-surface-container-high flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+        <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+      </div>
+      <div>
+        <h2 class="text-[16px] font-semibold text-primary">{{ g.titulo }}</h2>
+        <p class="text-[12px] text-on-surface-variant">{{ g.descripcion }}</p>
+      </div>
+    </div>
+    <span class="text-[11px] font-semibold text-secondary bg-surface-container-low px-3 py-1 rounded-full">{{ g.tipo }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+    <div class="lg:col-span-2 p-5 flex items-center justify-center bg-[#f4fafe]">
+      <img src="data:image/png;base64,{{ g.img }}"
+           alt="Gráfico {{ g.titulo }}"
+           class="max-w-full rounded-lg shadow-sm"/>
+    </div>
+
+    <div class="p-5 border-t lg:border-t-0 lg:border-l border-surface-container-high flex flex-col gap-3">
+      <span class="text-[11px] font-semibold text-outline tracking-wider uppercase">Medidas Calculadas</span>
+      <div class="flex flex-col gap-2">
+        {% for label, val in g.medidas.items() %}
+        <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-low">
+          <span class="text-[12px] text-on-surface-variant">{{ label }}</span>
+          <span class="text-[13px] font-bold text-primary">{{ val }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+{{ footer() }}

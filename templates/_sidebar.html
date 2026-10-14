@@ -1,0 +1,151 @@
+{% macro shell(active_page) %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "outline": "#74777f", "error": "#ba1a1a", "background": "#f4fafe",
+            "outline-variant": "#c4c6cf", "surface-container-lowest": "#ffffff",
+            "surface-tint": "#495f82", "surface-variant": "#dde3e7",
+            "primary-fixed-dim": "#b1c7f0", "surface-container-low": "#eef4f8",
+            "error-container": "#ffdad6", "tertiary-fixed-dim": "#4cd6fb",
+            "on-secondary": "#ffffff", "on-primary": "#ffffff", "secondary": "#395f95",
+            "primary-container": "#0b2545", "on-secondary-container": "#274f84",
+            "surface-container": "#e9eff3", "surface-dim": "#d5dbdf",
+            "on-surface": "#161c1f", "primary-fixed": "#d5e3ff",
+            "on-error": "#ffffff", "on-surface-variant": "#44474e",
+            "on-background": "#161c1f", "surface": "#f4fafe",
+            "on-tertiary-container": "#0099b8", "secondary-fixed-dim": "#a7c8ff",
+            "surface-container-high": "#e3e9ed", "primary": "#001026",
+            "surface-bright": "#f4fafe", "surface-container-highest": "#dde3e7",
+            "secondary-container": "#9dc3ff", "on-primary-container": "#778db2"
+          },
+          borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+          spacing: {
+            "space-xl": "2rem", "space-lg": "1.5rem", "margin": "1rem",
+            "space-sm": "0.5rem", "margin-desktop": "2rem", "space-md": "1rem", "space-xs": "0.25rem"
+          },
+          fontFamily: { sans: ["Inter", "sans-serif"] },
+          fontSize: {
+            "label-sm": ["11px", {lineHeight:"14px",fontWeight:"600"}],
+            "body-sm":  ["12px", {lineHeight:"16px",fontWeight:"400"}],
+            "body-lg":  ["16px", {lineHeight:"24px",fontWeight:"400"}],
+            "headline-lg": ["28px", {lineHeight:"36px",fontWeight:"600"}],
+            "title-md": ["14px", {lineHeight:"20px",fontWeight:"600"}],
+            "label-md": ["12px", {lineHeight:"16px",fontWeight:"500"}],
+            "body-md":  ["14px", {lineHeight:"20px",fontWeight:"400"}],
+            "headline-md": ["20px", {lineHeight:"28px",fontWeight:"600"}],
+            "headline-xl": ["36px", {lineHeight:"44px",fontWeight:"700"}],
+            "title-lg": ["16px", {lineHeight:"24px",fontWeight:"600"}]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @layer base { html,body{margin:0;padding:0;} body{overscroll-behavior:none;} }
+    ::-webkit-scrollbar{display:none;}
+  </style>
+</head>
+<body class="bg-background font-sans text-on-surface">
+
+<header class="fixed top-0 w-full z-40 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <div class="h-16 w-full px-margin md:px-[2rem] flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button id="drawer-toggle-btn" type="button" aria-label="Abrir menú"
+              onclick="document.getElementById('nav-drawer').classList.toggle('-translate-x-full'); document.getElementById('drawer-backdrop').classList.toggle('hidden');"
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors focus:outline-none">
+        <span class="material-symbols-outlined text-[24px]">menu</span>
+      </button>
+      <div class="flex flex-col">
+        <span class="text-[16px] font-semibold text-primary tracking-tight">Sistema COVID-19 Tacna</span>
+        <span class="text-[11px] font-semibold text-secondary tracking-wider uppercase">Vigilancia Epidemiológica Regional</span>
+      </div>
+    </div>
+    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+      <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+    </div>
+  </div>
+</header>
+
+<div id="drawer-backdrop"
+     onclick="document.getElementById('nav-drawer').classList.add('-translate-x-full'); this.classList.add('hidden');"
+     class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-50 hidden transition-opacity duration-300"></div>
+
+<aside id="nav-drawer"
+       class="fixed top-0 left-0 h-full w-80 bg-surface-container-lowest z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-[0_12px_32px_rgba(11,37,69,0.12)] flex flex-col">
+  <div class="h-16 px-6 flex items-center justify-between bg-surface-container-low">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary text-[24px]">coronavirus</span>
+      <div class="flex flex-col">
+        <span class="text-[14px] font-bold text-primary">COVID-19 Tacna</span>
+        <span class="text-[11px] text-on-surface-variant">Menú Principal</span>
+      </div>
+    </div>
+    <button type="button" aria-label="Cerrar menú"
+            onclick="document.getElementById('nav-drawer').classList.add('-translate-x-full'); document.getElementById('drawer-backdrop').classList.add('hidden');"
+            class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+  </div>
+  <div class="px-6 py-2 bg-surface-container-lowest">
+    <span class="text-[11px] font-semibold text-outline tracking-wider uppercase">Análisis Estadístico</span>
+  </div>
+  <nav class="flex-1 px-4 py-2 flex flex-col gap-1 overflow-y-auto">
+    {% set nav_items = [
+      ("home.html",                  "smart_toy",     "1. Home (IA)"),
+      ("cualitativa_nominal.html",   "category",      "2. Var. Cualitativa Nominal"),
+      ("cuantitativa_discreta.html", "bar_chart",     "3. Var. Cuantitativa Discreta"),
+      ("tendencia_central.html",     "trending_up",   "4. Medidas Tendencia Central"),
+      ("cualitativa_ordinal.html",   "sort",          "5. Var. Cualitativa Ordinal"),
+      ("dispersion.html",            "scatter_plot",  "6. Medidas de Dispersión"),
+    ] %}
+    {% for href, icon, label in nav_items %}
+      {% if href == active_page %}
+      <div class="flex items-center px-4 py-2 rounded-xl bg-primary-container text-on-primary-container text-[14px] font-semibold shadow-sm">
+        <span class="material-symbols-outlined mr-4 text-[20px] text-secondary">{{ icon }}</span>{{ label }}
+      </div>
+      {% else %}
+      <a href="/{{ href }}"
+         class="flex items-center px-4 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors text-[14px]">
+        <span class="material-symbols-outlined mr-4 text-[20px] text-secondary">{{ icon }}</span>{{ label }}
+      </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+  <div class="p-4 bg-surface-container-low">
+    <a href="/logout"
+       class="flex items-center w-full px-4 py-2 rounded-xl text-error hover:bg-error-container transition-colors text-[14px] font-semibold">
+      <span class="material-symbols-outlined mr-4 text-[20px]">logout</span>Cerrar sesión
+    </a>
+  </div>
+</aside>
+
+<main class="w-full pt-16 bg-background min-h-screen">
+  <div class="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 flex flex-col gap-6">
+{% endmacro %}
+
+{% macro footer() %}
+  </div>
+</main>
+<footer class="w-full bg-surface-container-lowest py-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <div class="w-full px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+    <div class="flex flex-col">
+      <span class="text-[14px] font-bold text-primary">Sistema COVID-19 Tacna</span>
+      <span class="text-[12px] text-on-surface-variant">Dirección Regional de Salud Tacna · Vigilancia y Control Epidemiológico</span>
+    </div>
+    <div class="text-[11px] text-outline">© 2024 Región Tacna. Datos Abiertos de Salud Pública.</div>
+  </div>
+</footer>
+</body>
+</html>
+{% endmacro %}
