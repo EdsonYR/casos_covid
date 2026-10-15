@@ -39,6 +39,13 @@ def _load_df() -> pd.DataFrame:
     return pd.read_csv(CSV_PATH, encoding="latin1", sep=";")
 
 
+def _df_ages_in_years(df: pd.DataFrame) -> pd.DataFrame:
+    """Devuelve registros con edad válida expresada en años."""
+    ages = df.loc[df["tipo_edad"].eq("ANOS")].copy()
+    ages["edad"] = pd.to_numeric(ages["edad"], errors="coerce")
+    return ages.dropna(subset=["edad"])
+
+
 def _excel_value_text(value: object) -> str:
     if pd.isna(value):
         return ""
@@ -473,7 +480,8 @@ def tendencia_central():
 
     df = _load_df()
     graficos = []
-    edades = df["edad"].dropna()
+    df_anos = _df_ages_in_years(df)
+    edades = df_anos["edad"]
 
     media  = float(edades.mean())
     mediana = float(edades.median())
@@ -506,8 +514,8 @@ def tendencia_central():
 
     # Gráfico 2: Boxplot por sexo — mediana visual
     fig, ax = plt.subplots(figsize=(6, 5), facecolor=_FONDO)
-    data_m = df[df["sexo"] == "MASCULINO"]["edad"].dropna()
-    data_f = df[df["sexo"] == "FEMENINO"]["edad"].dropna()
+    data_m = df_anos[df_anos["sexo"] == "MASCULINO"]["edad"]
+    data_f = df_anos[df_anos["sexo"] == "FEMENINO"]["edad"]
     bp = ax.boxplot([data_m, data_f], tick_labels=["Masculino", "Femenino"],
                     patch_artist=True, notch=False,
                     medianprops=dict(color="#ba1a1a", linewidth=2.5))
@@ -608,10 +616,11 @@ def dispersion():
 
     df = _load_df()
     graficos = []
-    edades = df["edad"].dropna()
+    df_anos = _df_ages_in_years(df)
+    edades = df_anos["edad"]
 
-    varianza  = float(edades.var())
-    desv_std  = float(edades.std())
+    varianza  = float(edades.var(ddof=0))
+    desv_std  = float(edades.std(ddof=0))
     rango     = float(edades.max() - edades.min())
     cv        = desv_std / edades.mean() * 100
     q1, q3    = float(edades.quantile(0.25)), float(edades.quantile(0.75))
@@ -638,7 +647,7 @@ def dispersion():
         "tipo": "Histograma con bandas",
         "img": _fig_to_b64(fig),
         "medidas": {
-            "Varianza": f"{varianza:.2f}",
+            "Varianza": f"{varianza:.2f} años²",
             "Desv. estándar": f"{desv_std:.2f} años",
             "Rango": f"{int(rango)} años",
             "Coef. variación": f"{cv:.1f}%",
@@ -649,7 +658,7 @@ def dispersion():
 
     # Gráfico 2: Boxplot comparativo por año con dispersión
     anos_validos = [2020, 2021, 2022]
-    data_anos = [df[df["ano"] == a]["edad"].dropna() for a in anos_validos]
+    data_anos = [df_anos[df_anos["ano"] == a]["edad"] for a in anos_validos]
     fig, ax = plt.subplots(figsize=(7, 5), facecolor=_FONDO)
     bp = ax.boxplot(data_anos, tick_labels=[str(a) for a in anos_validos],
                     patch_artist=True, notch=False,
@@ -666,7 +675,7 @@ def dispersion():
         "tipo": "Boxplot comparativo",
         "img": _fig_to_b64(fig),
         "medidas": {
-            f"σ {a}": f"{df[df['ano']==a]['edad'].std():.2f}"
+            f"σ {a}": f"{df_anos[df_anos['ano']==a]['edad'].std(ddof=0):.2f}"
             for a in anos_validos
         },
     })
