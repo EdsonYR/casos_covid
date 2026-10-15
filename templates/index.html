@@ -91,6 +91,29 @@
       line-height: 1.5;
     }
 
+    .members {
+      margin: 22px 0 0;
+      padding: 16px;
+      border-radius: 10px;
+      background: #f5f8f7;
+    }
+
+    .members h2 {
+      margin: 0 0 8px;
+      color: #314443;
+      font-size: 13px;
+    }
+
+    .members ul {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding-left: 18px;
+      color: #687776;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     form {
       display: grid;
       gap: 19px;
@@ -224,6 +247,17 @@
     <p class="eyebrow">Proyecto de investigación</p>
     <h1>Análisis estadístico de muertos por COVID-19 en Tacna</h1>
     <p class="group">Grupo 3 de Matemáticas para la CCSS</p>
+
+    <section class="members" aria-labelledby="members-title">
+      <h2 id="members-title">Integrantes</h2>
+      <ul>
+        <li>Viviana Estefani Lescano Espinoza</li>
+        <li>Gelyn Dallana Quevedo Navarro</li>
+        <li>Yasmin Sue Carhuapoma Tacure</li>
+        <li>Edson Ruben Yovera Ramos</li>
+        <li>Anghely Yareen Zeta Campoverde</li>
+      </ul>
+    </section>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
